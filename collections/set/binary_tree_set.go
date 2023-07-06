@@ -110,3 +110,16 @@ func (s *BinaryTreeSet) RemoveLast() bool {
 func (s *BinaryTreeSet) ToSortedSlice() []int {
 	return s.innerMap.Keys()
 }
+
+// ----------------
+// Specialized methods
+
+// RightRotation performs a right rotation on the tree root node
+func (s *BinaryTreeSet) RightRotation() {
+	s.innerMap.RightRotation()
+}
+
+// LeftRotation performs a left rotation on the tree root node
+func (s *BinaryTreeSet) LeftRotation() {
+	s.innerMap.LeftRotation()
+}

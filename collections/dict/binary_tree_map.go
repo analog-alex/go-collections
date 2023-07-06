@@ -287,3 +287,36 @@ func (s *BinaryTreeMap) RemoveLast() bool {
 
 	return true
 }
+
+// ----------------
+// Specialized methods
+
+// RightRotation performs a right rotation on the tree root node
+func (s *BinaryTreeMap) RightRotation() {
+	rightRotationOnNode(s.root)
+}
+
+// LeftRotation performs a left rotation on the tree root node
+func (s *BinaryTreeMap) LeftRotation() {
+	leftRotationOnNode(s.root)
+}
+
+func rightRotationOnNode(node *binaryTreeNode) {
+	if node == nil {
+		return
+	}
+
+	leftTree := node.left
+	node.left = leftTree.right
+	leftTree.right = node
+}
+
+func leftRotationOnNode(node *binaryTreeNode) {
+	if node == nil {
+		return
+	}
+
+	rightTree := node.right
+	node.right = rightTree.left
+	rightTree.left = node
+}
