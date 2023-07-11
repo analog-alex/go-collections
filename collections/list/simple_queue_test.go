@@ -6,7 +6,7 @@ import (
 )
 
 func TestSimpleQueue_Enqueue(t *testing.T) {
-	var q Queue = MakeSimpleQueue()
+	var q Queue[int] = MakeSimpleQueue[int]()
 	q.Enqueue(1)
 	q.Enqueue(2)
 	q.Enqueue(3)
@@ -15,7 +15,7 @@ func TestSimpleQueue_Enqueue(t *testing.T) {
 }
 
 func TestSimpleQueue_Size(t *testing.T) {
-	var q Queue = MakeSimpleQueue()
+	var q Queue[int] = MakeSimpleQueue[int]()
 	q.Enqueue(1)
 	q.Enqueue(2)
 
@@ -23,20 +23,20 @@ func TestSimpleQueue_Size(t *testing.T) {
 }
 
 func TestSimpleQueue_IsEmpty(t *testing.T) {
-	var q Queue = MakeSimpleQueue()
+	var q Queue[int] = MakeSimpleQueue[int]()
 
 	assert.True(t, q.IsEmpty())
 }
 
 func TestSimpleQueue_IsNotEmpty(t *testing.T) {
-	var q Queue = MakeSimpleQueue()
+	var q Queue[int] = MakeSimpleQueue[int]()
 	q.Enqueue(1)
 
 	assert.False(t, q.IsEmpty())
 }
 
 func TestSimpleQueue_Dequeue(t *testing.T) {
-	var q Queue = MakeSimpleQueue()
+	var q Queue[int] = MakeSimpleQueue[int]()
 	q.Enqueue(1)
 
 	val, ok := q.Dequeue()
@@ -47,7 +47,7 @@ func TestSimpleQueue_Dequeue(t *testing.T) {
 }
 
 func TestSimpleQueue_Peek(t *testing.T) {
-	var q Queue = MakeSimpleQueue()
+	var q Queue[int] = MakeSimpleQueue[int]()
 	q.Enqueue(1)
 
 	val, ok := q.Peek()

@@ -6,7 +6,7 @@ import (
 )
 
 func TestSimpleStack_Enqueue(t *testing.T) {
-	var s Stack = MakeSimpleStack()
+	var s Stack[int] = MakeSimpleStack[int]()
 	s.Push(1)
 	s.Push(2)
 	s.Push(3)
@@ -15,7 +15,7 @@ func TestSimpleStack_Enqueue(t *testing.T) {
 }
 
 func TestSimpleStack_Size(t *testing.T) {
-	var s Stack = MakeSimpleStack()
+	var s Stack[int] = MakeSimpleStack[int]()
 	s.Push(1)
 	s.Push(2)
 
@@ -23,20 +23,20 @@ func TestSimpleStack_Size(t *testing.T) {
 }
 
 func TestSimpleStack_IsEmpty(t *testing.T) {
-	var s Stack = MakeSimpleStack()
+	var s Stack[int] = MakeSimpleStack[int]()
 
 	assert.True(t, s.IsEmpty())
 }
 
 func TestSimpleStack_IsNotEmpty(t *testing.T) {
-	var s Stack = MakeSimpleStack()
+	var s Stack[int] = MakeSimpleStack[int]()
 	s.Push(1)
 
 	assert.False(t, s.IsEmpty())
 }
 
 func TestSimpleStack_Dequeue(t *testing.T) {
-	var s Stack = MakeSimpleStack()
+	var s Stack[int] = MakeSimpleStack[int]()
 	s.Push(1)
 
 	val, ok := s.Pop()
@@ -47,7 +47,7 @@ func TestSimpleStack_Dequeue(t *testing.T) {
 }
 
 func TestSimpleStack_Peek(t *testing.T) {
-	var s Stack = MakeSimpleStack()
+	var s Stack[int] = MakeSimpleStack[int]()
 	s.Push(1)
 
 	val, ok := s.Peek()

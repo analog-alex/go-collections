@@ -2,21 +2,22 @@ package list
 
 // Make this based on our implementation of a linked list later
 
-type SimpleStack struct {
-	elements []int
+type SimpleStack[T any] struct {
+	elements []T
 }
 
-func MakeSimpleStack() *SimpleStack {
-	return &SimpleStack{elements: make([]int, 0)}
+func MakeSimpleStack[T any]() *SimpleStack[T] {
+	return &SimpleStack[T]{elements: make([]T, 0)}
 }
 
-func (s *SimpleStack) Push(val int) {
+func (s *SimpleStack[T]) Push(val T) {
 	s.elements = append(s.elements, val)
 }
 
-func (s *SimpleStack) Pop() (int, bool) {
+func (s *SimpleStack[T]) Pop() (T, bool) {
 	if s.IsEmpty() {
-		return 0, false
+		var zero T
+		return zero, false
 	}
 
 	val := s.elements[len(s.elements)-1]
@@ -24,31 +25,32 @@ func (s *SimpleStack) Pop() (int, bool) {
 	return val, true
 }
 
-func (s *SimpleStack) Peek() (int, bool) {
+func (s *SimpleStack[T]) Peek() (T, bool) {
 	if s.IsEmpty() {
-		return 0, false
+		var zero T
+		return zero, false
 	}
 
 	return s.elements[len(s.elements)-1], true
 }
 
-func (s *SimpleStack) Size() int {
+func (s *SimpleStack[T]) Size() int {
 	return len(s.elements)
 }
 
-func (s *SimpleStack) Clear() {
-	s.elements = make([]int, 0)
+func (s *SimpleStack[T]) Clear() {
+	s.elements = make([]T, 0)
 }
 
-func (s *SimpleStack) IsEmpty() bool {
+func (s *SimpleStack[T]) IsEmpty() bool {
 	return len(s.elements) == 0
 }
 
-func (s *SimpleStack) IsNotEmpty() bool {
+func (s *SimpleStack[T]) IsNotEmpty() bool {
 	return len(s.elements) > 0
 }
 
-func (s *SimpleStack) Formatted() string {
+func (s *SimpleStack[T]) Formatted() string {
 	// TODO print out the list in fifo order
 	return ""
 }

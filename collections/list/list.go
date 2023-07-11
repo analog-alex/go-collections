@@ -2,24 +2,25 @@ package list
 
 import "io.analogalex.collections/collections"
 
-type List interface {
+type List[T any] interface {
 	collections.Collection
-	Add(val int)
-	Remove(val int) bool
-	Get(index int) (int, bool)
-	Contains(val int) bool
+	Add(val T)
+	Remove(val T) bool
+	Get(index int) (T, bool)
+	Contains(val T) bool
+	// TODO Sort(func (T, T) bool)
 }
 
-type Queue interface {
+type Queue[T any] interface {
 	collections.Collection
-	Enqueue(val int)
-	Dequeue() (int, bool)
-	Peek() (int, bool)
+	Enqueue(val T)
+	Dequeue() (T, bool)
+	Peek() (T, bool)
 }
 
-type Stack interface {
+type Stack[T any] interface {
 	collections.Collection
-	Push(val int)
-	Pop() (int, bool)
-	Peek() (int, bool)
+	Push(val T)
+	Pop() (T, bool)
+	Peek() (T, bool)
 }

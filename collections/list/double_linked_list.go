@@ -1,25 +1,28 @@
 package list
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
-type biDirectionalEntry struct {
-	val  int
-	next *biDirectionalEntry
-	prev *biDirectionalEntry
+type biDirectionalEntry[T any] struct {
+	val  T
+	next *biDirectionalEntry[T]
+	prev *biDirectionalEntry[T]
 }
 
-type DoubleLinkedList struct {
-	head *biDirectionalEntry
-	tail *biDirectionalEntry
+type DoubleLinkedList[T any] struct {
+	head *biDirectionalEntry[T]
+	tail *biDirectionalEntry[T]
 }
 
-func MakeDoubleLinkedList() *DoubleLinkedList {
-	return &DoubleLinkedList{nil, nil}
+func MakeDoubleLinkedList[T any]() *DoubleLinkedList[T] {
+	return &DoubleLinkedList[T]{nil, nil}
 }
 
 // Add adds a new entry to the end of the list
-func (l *DoubleLinkedList) Add(val int) {
-	newEntry := &biDirectionalEntry{val, nil, nil}
+func (l *DoubleLinkedList[T]) Add(val T) {
+	newEntry := &biDirectionalEntry[T]{val, nil, nil}
 	if l.head == nil {
 		l.head = newEntry
 		l.tail = newEntry
@@ -39,15 +42,17 @@ func (l *DoubleLinkedList) Add(val int) {
 	l.tail = l.tail.next
 }
 
-func (l *DoubleLinkedList) Get(index int) (int, bool) {
+func (l *DoubleLinkedList[T]) Get(index int) (T, bool) {
 	if l.head == nil {
-		return 0, false
+		var zero T
+		return zero, false
 	}
 
 	current := l.head
 	for i := 0; i < index; i++ {
 		if current.next == nil {
-			return 0, false
+			var zero T
+			return zero, false
 		}
 		current = current.next
 	}
@@ -55,12 +60,12 @@ func (l *DoubleLinkedList) Get(index int) (int, bool) {
 	return current.val, true
 }
 
-func (l *DoubleLinkedList) Remove(val int) bool {
+func (l *DoubleLinkedList[T]) Remove(val T) bool {
 	if l.head == nil {
 		return false
 	}
 
-	if l.head.val == val {
+	if reflect.DeepEqual(l.head.val, val) {
 		l.head = l.head.next
 		if l.head != nil {
 			l.head.prev = nil
@@ -72,7 +77,7 @@ func (l *DoubleLinkedList) Remove(val int) bool {
 
 	current := l.head.next
 	for current != nil {
-		if current.val == val {
+		if reflect.DeepEqual(current.val, val) {
 			current.prev.next = current.next
 			if current.next != nil {
 				current.next.prev = current.prev
@@ -88,14 +93,14 @@ func (l *DoubleLinkedList) Remove(val int) bool {
 }
 
 // Contains returns true if the list contains the given value
-func (l *DoubleLinkedList) Contains(val int) bool {
+func (l *DoubleLinkedList[T]) Contains(val T) bool {
 	if l.head == nil {
 		return false
 	}
 
 	current := l.head
 	for current != nil {
-		if current.val == val {
+		if reflect.DeepEqual(current.val, val) {
 			return true
 		}
 		current = current.next
@@ -105,7 +110,7 @@ func (l *DoubleLinkedList) Contains(val int) bool {
 }
 
 // Size returns the number of entries in the list
-func (l *DoubleLinkedList) Size() int {
+func (l *DoubleLinkedList[T]) Size() int {
 	if l.head == nil {
 		return 0
 	}
@@ -121,23 +126,23 @@ func (l *DoubleLinkedList) Size() int {
 }
 
 // Clear removes all entries from the list
-func (l *DoubleLinkedList) Clear() {
+func (l *DoubleLinkedList[T]) Clear() {
 	l.head = nil
 	l.tail = nil
 }
 
 // IsEmpty returns true if the list is empty
-func (l *DoubleLinkedList) IsEmpty() bool {
+func (l *DoubleLinkedList[T]) IsEmpty() bool {
 	return l.head == nil
 }
 
 // IsNotEmpty returns true if the list is not empty
-func (l *DoubleLinkedList) IsNotEmpty() bool {
+func (l *DoubleLinkedList[T]) IsNotEmpty() bool {
 	return l.head != nil
 }
 
 // Formatted returns a string representation of the list
-func (l *DoubleLinkedList) Formatted() string {
+func (l *DoubleLinkedList[T]) Formatted() string {
 	if l.head == nil {
 		return "[]"
 	}
@@ -145,7 +150,7 @@ func (l *DoubleLinkedList) Formatted() string {
 	current := l.head
 	formatted := "["
 	for current != nil {
-		formatted += fmt.Sprintf("%d", current.val)
+		formatted += fmt.Sprintf("%v", current.val)
 		if current.next != nil {
 			formatted += ", "
 		}

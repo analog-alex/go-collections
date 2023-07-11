@@ -2,21 +2,22 @@ package list
 
 // Make this based on our implementation of a linked list later
 
-type SimpleQueue struct {
-	elements []int
+type SimpleQueue[T any] struct {
+	elements []T
 }
 
-func MakeSimpleQueue() *SimpleQueue {
-	return &SimpleQueue{elements: make([]int, 0)}
+func MakeSimpleQueue[T any]() *SimpleQueue[T] {
+	return &SimpleQueue[T]{elements: make([]T, 0)}
 }
 
-func (q *SimpleQueue) Enqueue(val int) {
+func (q *SimpleQueue[T]) Enqueue(val T) {
 	q.elements = append(q.elements, val)
 }
 
-func (q *SimpleQueue) Dequeue() (int, bool) {
+func (q *SimpleQueue[T]) Dequeue() (T, bool) {
 	if q.IsEmpty() {
-		return 0, false
+		var zero T
+		return zero, false
 	}
 
 	val := q.elements[0]
@@ -24,31 +25,32 @@ func (q *SimpleQueue) Dequeue() (int, bool) {
 	return val, true
 }
 
-func (q *SimpleQueue) Peek() (int, bool) {
+func (q *SimpleQueue[T]) Peek() (T, bool) {
 	if q.IsEmpty() {
-		return 0, false
+		var zero T
+		return zero, false
 	}
 
 	return q.elements[0], true
 }
 
-func (q *SimpleQueue) Size() int {
+func (q *SimpleQueue[T]) Size() int {
 	return len(q.elements)
 }
 
-func (q *SimpleQueue) Clear() {
-	q.elements = make([]int, 0)
+func (q *SimpleQueue[T]) Clear() {
+	q.elements = make([]T, 0)
 }
 
-func (q *SimpleQueue) IsEmpty() bool {
+func (q *SimpleQueue[T]) IsEmpty() bool {
 	return len(q.elements) == 0
 }
 
-func (q *SimpleQueue) IsNotEmpty() bool {
+func (q *SimpleQueue[T]) IsNotEmpty() bool {
 	return len(q.elements) > 0
 }
 
-func (q *SimpleQueue) Formatted() string {
+func (q *SimpleQueue[T]) Formatted() string {
 	// TODO print out the list in fifo order
 	return ""
 }

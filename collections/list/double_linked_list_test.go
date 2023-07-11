@@ -6,7 +6,7 @@ import (
 )
 
 func TestDoubleLinkedList_Add(t *testing.T) {
-	var l List = MakeDoubleLinkedList()
+	var l List[int] = MakeDoubleLinkedList[int]()
 	l.Add(1)
 	l.Add(2)
 	l.Add(3)
@@ -15,14 +15,14 @@ func TestDoubleLinkedList_Add(t *testing.T) {
 }
 
 func TestDoubleLinkedList_Head(t *testing.T) {
-	var l List = MakeDoubleLinkedList()
+	var l List[int] = MakeDoubleLinkedList[int]()
 	l.Add(1)
 
 	assert.Equal(t, 1, l.Size())
 }
 
 func TestDoubleLinkedList_Size(t *testing.T) {
-	var l List = MakeDoubleLinkedList()
+	var l List[int] = MakeDoubleLinkedList[int]()
 	l.Add(1)
 	l.Add(2)
 	l.Add(3)
@@ -31,7 +31,7 @@ func TestDoubleLinkedList_Size(t *testing.T) {
 }
 
 func TestDoubleLinkedList_Get(t *testing.T) {
-	var l List = MakeDoubleLinkedList()
+	var l List[int] = MakeDoubleLinkedList[int]()
 	l.Add(1)
 
 	val, ok := l.Get(0)
@@ -44,7 +44,7 @@ func TestDoubleLinkedList_Get(t *testing.T) {
 }
 
 func TestDoubleLinkedList_Remove(t *testing.T) {
-	var l List = MakeDoubleLinkedList()
+	var l List[int] = MakeDoubleLinkedList[int]()
 	l.Add(1)
 	l.Add(2)
 	l.Add(3)
@@ -55,7 +55,7 @@ func TestDoubleLinkedList_Remove(t *testing.T) {
 }
 
 func TestDoubleLinkedList_RemoveHead(t *testing.T) {
-	var l List = MakeDoubleLinkedList()
+	var l List[int] = MakeDoubleLinkedList[int]()
 	l.Add(1)
 
 	assert.True(t, l.Remove(1))
@@ -64,7 +64,7 @@ func TestDoubleLinkedList_RemoveHead(t *testing.T) {
 }
 
 func TestDoubleLinkedList_TailInvariantConservedAfterRemoval(t *testing.T) {
-	var l List = MakeDoubleLinkedList()
+	var l List[int] = MakeDoubleLinkedList[int]()
 	l.Add(1)
 	l.Add(2)
 	l.Add(3)
@@ -86,7 +86,7 @@ func TestDoubleLinkedList_TailInvariantConservedAfterRemoval(t *testing.T) {
 }
 
 func TestDoubleLinkedList_Contains(t *testing.T) {
-	var l List = MakeDoubleLinkedList()
+	var l List[int] = MakeDoubleLinkedList[int]()
 	l.Add(1)
 	l.Add(2)
 	l.Add(3)
@@ -97,7 +97,7 @@ func TestDoubleLinkedList_Contains(t *testing.T) {
 }
 
 func TestDoubleLinkedList_IsEmpty(t *testing.T) {
-	var l List = MakeDoubleLinkedList()
+	var l List[int] = MakeDoubleLinkedList[int]()
 	assert.True(t, l.IsEmpty())
 
 	l.Add(1)
@@ -105,7 +105,7 @@ func TestDoubleLinkedList_IsEmpty(t *testing.T) {
 }
 
 func TestDoubleLinkedList_IsNotEmpty(t *testing.T) {
-	var l List = MakeDoubleLinkedList()
+	var l List[int] = MakeDoubleLinkedList[int]()
 	assert.False(t, l.IsNotEmpty())
 
 	l.Add(1)

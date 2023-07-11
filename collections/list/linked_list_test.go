@@ -6,7 +6,7 @@ import (
 )
 
 func TestLinkedList_Add(t *testing.T) {
-	var l List = MakeLinkedList()
+	var l List[int] = MakeLinkedList[int]()
 	l.Add(1)
 	l.Add(2)
 	l.Add(3)
@@ -15,14 +15,14 @@ func TestLinkedList_Add(t *testing.T) {
 }
 
 func TestLinkedList_Head(t *testing.T) {
-	var l List = MakeLinkedList()
+	var l List[int] = MakeLinkedList[int]()
 	l.Add(1)
 
 	assert.Equal(t, 1, l.Size())
 }
 
 func TestLinkedList_Size(t *testing.T) {
-	var l List = MakeLinkedList()
+	var l List[int] = MakeLinkedList[int]()
 	l.Add(1)
 	l.Add(2)
 	l.Add(3)
@@ -31,7 +31,7 @@ func TestLinkedList_Size(t *testing.T) {
 }
 
 func TestLinkedList_Get(t *testing.T) {
-	var l List = MakeLinkedList()
+	var l List[int] = MakeLinkedList[int]()
 	l.Add(1)
 
 	val, ok := l.Get(0)
@@ -44,7 +44,7 @@ func TestLinkedList_Get(t *testing.T) {
 }
 
 func TestLinkedList_Remove(t *testing.T) {
-	var l List = MakeLinkedList()
+	var l List[int] = MakeLinkedList[int]()
 	l.Add(1)
 	l.Add(2)
 	l.Add(3)
@@ -55,7 +55,7 @@ func TestLinkedList_Remove(t *testing.T) {
 }
 
 func TestLinkedList_RemoveHead(t *testing.T) {
-	var l List = MakeLinkedList()
+	var l List[int] = MakeLinkedList[int]()
 	l.Add(1)
 
 	assert.True(t, l.Remove(1))
@@ -64,7 +64,7 @@ func TestLinkedList_RemoveHead(t *testing.T) {
 }
 
 func TestLinkedList_TailInvariantConservedAfterRemoval(t *testing.T) {
-	var l List = MakeLinkedList()
+	var l List[int] = MakeLinkedList[int]()
 	l.Add(1)
 	l.Add(2)
 	l.Add(3)
@@ -86,7 +86,7 @@ func TestLinkedList_TailInvariantConservedAfterRemoval(t *testing.T) {
 }
 
 func TestLinkedList_Contains(t *testing.T) {
-	var l List = MakeLinkedList()
+	var l List[int] = MakeLinkedList[int]()
 	l.Add(1)
 	l.Add(2)
 	l.Add(3)
@@ -97,7 +97,7 @@ func TestLinkedList_Contains(t *testing.T) {
 }
 
 func TestLinkedList_IsEmpty(t *testing.T) {
-	var l List = MakeLinkedList()
+	var l List[int] = MakeLinkedList[int]()
 	assert.True(t, l.IsEmpty())
 
 	l.Add(1)
@@ -105,9 +105,9 @@ func TestLinkedList_IsEmpty(t *testing.T) {
 }
 
 func TestLinkedList_IsNotEmpty(t *testing.T) {
-	var l List = MakeLinkedList()
+	var l List[string] = MakeLinkedList[string]()
 	assert.False(t, l.IsNotEmpty())
 
-	l.Add(1)
+	l.Add("pi")
 	assert.True(t, l.IsNotEmpty())
 }
