@@ -2,7 +2,7 @@ package set
 
 import (
 	"fmt"
-	"io.analogalex.collections/collections/dict"
+	"utils-generics/collections/dict"
 )
 
 // BinaryTreeSet is a set implementation using a binary tree map -- roughly speaking it implements a binary tree solution.

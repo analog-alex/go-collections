@@ -1,6 +1,6 @@
 package dict
 
-import "io.analogalex.collections/collections"
+import "utils-generics/collections"
 
 type Entry struct {
 	Key int

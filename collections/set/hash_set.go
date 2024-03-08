@@ -2,7 +2,7 @@ package set
 
 import (
 	"fmt"
-	"io.analogalex.collections/collections/dict"
+	"utils-generics/collections/dict"
 )
 
 // HashSet is a set implementation using a hash map -- roughly speaking it implements a hash table solution.

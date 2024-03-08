@@ -1,6 +1,6 @@
 package set
 
-import "io.analogalex.collections/collections/dict"
+import "utils-generics/collections/dict"
 
 type FlatSet struct {
 	innerMap *dict.FlatMap

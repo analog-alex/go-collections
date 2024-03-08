@@ -14,11 +14,9 @@ func MakeFlatMap() *FlatMap {
 }
 
 /*
-*
-
-	Binary search for the key in the array.
-	We keep the array sorted by key, so we can use binary search to find the key.
-*/
+* Binary search for the key in the array.
+* We keep the array sorted by key, so we can use binary search to find the key.
+ */
 func (s *FlatMap) binarySearch(key int) (flatMapEntry, bool) {
 	l, h := 0, len(s.array)-1
 	for l <= h {
@@ -39,28 +37,15 @@ func (s *FlatMap) binarySearch(key int) (flatMapEntry, bool) {
 
 // Put inserts a new key-value pair into the map. If the key already exists, the value is updated.
 func (s *FlatMap) Put(key int, val string) {
-	var index int
+	s.array = append(s.array, flatMapEntry{key: key, val: val})
 
-	// find the index where the key should be inserted
-	for i, entry := range s.array {
-		if entry.key < key {
-			index = i + 1
+	for i := len(s.array) - 1; i > 0; i-- {
+		// conserve the well ordering of the array elements
+		if s.array[i].key < s.array[i-1].key {
+			s.array[i], s.array[i-1] = s.array[i-1], s.array[i]
+		} else {
+			break
 		}
-
-		// if we find the key, update the value in place
-		if entry.key == key {
-			s.array[i].val = val
-			return
-		}
-	}
-
-	// to maintain order, create a new array with the new entry in the correct position
-	if index == len(s.array) {
-		s.array = append(s.array, flatMapEntry{key: key, val: val})
-	} else if index == 0 {
-		s.array = append([]flatMapEntry{{key: key, val: val}}, s.array...)
-	} else {
-		s.array = append(s.array[:index], append([]flatMapEntry{{key: key, val: val}}, s.array[index:]...)...)
 	}
 }
 

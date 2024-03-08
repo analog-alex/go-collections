@@ -1,4 +1,4 @@
-module io.analogalex.collections
+module utils-generics
 
 go 1.20
 

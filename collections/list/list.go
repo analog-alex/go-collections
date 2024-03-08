@@ -1,6 +1,6 @@
 package list
 
-import "io.analogalex.collections/collections"
+import "utils-generics/collections"
 
 type List[T any] interface {
 	collections.Collection
