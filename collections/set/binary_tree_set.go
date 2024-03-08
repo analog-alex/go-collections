@@ -19,18 +19,18 @@ import (
 //
 // - Contains: O(log n)
 type BinaryTreeSet struct {
-	innerMap *dict.BinaryTreeMap
+	innerMap *dict.BinaryTreeMap[bool]
 }
 
 // MakeBinaryTreeSet creates a new BinaryTreeSet
 func MakeBinaryTreeSet() *BinaryTreeSet {
-	return &BinaryTreeSet{innerMap: dict.MakeBinaryTreeMap()}
+	return &BinaryTreeSet{innerMap: dict.MakeBinaryTreeMap[bool]()}
 }
 
 // Add adds a new element to the set
 // This operation is idempotent, so if the element already exists in the set, it is equivalent to a no-op
 func (s *BinaryTreeSet) Add(val int) {
-	s.innerMap.Put(val, "")
+	s.innerMap.Put(val, true)
 }
 
 // Remove removes an element from the set
