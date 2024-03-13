@@ -4,7 +4,7 @@ import "utils-generics/collections"
 
 type Entry[T any] struct {
 	Key int
-	Val any
+	Val T
 }
 
 type Map[T any] interface {

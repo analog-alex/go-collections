@@ -126,7 +126,7 @@ func (s *BinaryTreeMap[T]) Get(key int) (T, bool) {
 			node = node.right
 		} else {
 			// how should we return the value
-			return node.Val.(T), true
+			return node.Val, true
 		}
 	}
 
@@ -208,7 +208,7 @@ func (s *BinaryTreeMap[T]) Keys() []int {
 func (s *BinaryTreeMap[T]) Values() []T {
 	var values []T
 	transverse(s.root, func(node *binaryTreeNode[T]) {
-		values = append(values, node.Val.(T))
+		values = append(values, node.Val)
 	})
 	return values
 }
@@ -237,7 +237,7 @@ func (s *BinaryTreeMap[T]) First() (int, T) {
 	for node.left != nil {
 		node = node.left
 	}
-	return node.Key, node.Val.(T)
+	return node.Key, node.Val
 }
 
 // Last returns the last entry of the map
@@ -251,7 +251,7 @@ func (s *BinaryTreeMap[T]) Last() (int, T) {
 	for node.right != nil {
 		node = node.right
 	}
-	return node.Key, node.Val.(T)
+	return node.Key, node.Val
 }
 
 // RemoveFirst removes the first element of the set

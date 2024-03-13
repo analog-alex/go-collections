@@ -98,7 +98,7 @@ func (s *HashMap[T]) Get(key int) (T, bool) {
 	node := s.table[hash]
 	for {
 		if node.Key == key {
-			return node.Val.(T), true
+			return node.Val, true
 		}
 		if node.next == nil {
 			return zero, false
@@ -137,9 +137,9 @@ func (s *HashMap[T]) Formatted() string {
 	str := "{"
 	for _, node := range s.table {
 		if node != nil {
-			str += fmt.Sprintf("%d: %s, ", node.Key, node.Val)
+			str += fmt.Sprintf("%d: %T, ", node.Key, node.Val)
 			for node.next != nil {
-				str += ", " + fmt.Sprintf("%d: %s, ", node.Key, node.Val)
+				str += ", " + fmt.Sprintf("%d: %T, ", node.Key, node.Val)
 				node = node.next
 			}
 		}
@@ -192,9 +192,9 @@ func (s *HashMap[T]) Values() []T {
 	values := make([]T, 0, s.Size())
 	for _, node := range s.table {
 		if node != nil {
-			values = append(values, node.Val.(T))
+			values = append(values, node.Val)
 			for node.next != nil {
-				values = append(values, node.Val.(T))
+				values = append(values, node.Val)
 				node = node.next
 			}
 		}

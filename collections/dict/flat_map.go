@@ -61,7 +61,7 @@ func (s *FlatMap[T]) Get(key int) (T, bool) {
 		var zero T
 		return zero, false
 	}
-	return l.Val.(T), true
+	return l.Val, true
 }
 
 func (s *FlatMap[T]) ContainsKey(key int) bool {
@@ -110,7 +110,7 @@ func (s *FlatMap[T]) Keys() []int {
 func (s *FlatMap[T]) Values() []T {
 	var values []T
 	for _, entry := range s.array {
-		values = append(values, entry.Val.(T))
+		values = append(values, entry.Val)
 	}
 
 	return values
