@@ -18,58 +18,59 @@ import (
 // - Remove: O(log n)
 //
 // - Contains: O(log n)
-type BinaryTreeSet struct {
-	innerMap *dict.BinaryTreeMap[bool]
+type BinaryTreeSet[K any] struct {
+	innerMap *dict.BinaryTreeMap[K, bool]
 }
 
 // MakeBinaryTreeSet creates a new BinaryTreeSet
-func MakeBinaryTreeSet() *BinaryTreeSet {
-	return &BinaryTreeSet{innerMap: dict.MakeBinaryTreeMap[bool]()}
+func MakeBinaryTreeSet[K any](comparator func(a, b K) int) *BinaryTreeSet[K] {
+	innerMap := dict.MakeBinaryTreeMap[K, bool](comparator)
+	return &BinaryTreeSet[K]{innerMap: innerMap}
 }
 
 // Add adds a new element to the set
 // This operation is idempotent, so if the element already exists in the set, it is equivalent to a no-op
-func (s *BinaryTreeSet) Add(val int) {
+func (s *BinaryTreeSet[K]) Add(val K) {
 	s.innerMap.Put(val, true)
 }
 
 // Remove removes an element from the set
-func (s *BinaryTreeSet) Remove(val int) bool {
+func (s *BinaryTreeSet[K]) Remove(val K) bool {
 	return s.innerMap.Remove(val)
 }
 
 // Contains checks if the set contains an element
-func (s *BinaryTreeSet) Contains(val int) bool {
+func (s *BinaryTreeSet[K]) Contains(val K) bool {
 	return s.innerMap.ContainsKey(val)
 }
 
 // Size returns the size of the set
-func (s *BinaryTreeSet) Size() int {
+func (s *BinaryTreeSet[K]) Size() int {
 	return s.innerMap.Size()
 }
 
 // Clear removes all elements from the set
-func (s *BinaryTreeSet) Clear() {
+func (s *BinaryTreeSet[K]) Clear() {
 	s.innerMap.Clear()
 }
 
 // IsEmpty checks if the set is empty
-func (s *BinaryTreeSet) IsEmpty() bool {
+func (s *BinaryTreeSet[K]) IsEmpty() bool {
 	return s.innerMap.IsEmpty()
 }
 
 // IsNotEmpty checks if the set is not empty
-func (s *BinaryTreeSet) IsNotEmpty() bool {
+func (s *BinaryTreeSet[K]) IsNotEmpty() bool {
 	return s.innerMap.IsNotEmpty()
 }
 
 // Formatted returns a string representation of the set
-func (s *BinaryTreeSet) Formatted() string {
+func (s *BinaryTreeSet[K]) Formatted() string {
 	entries := s.innerMap.Entries()
 	str := "{"
 
 	for _, entry := range entries {
-		str += fmt.Sprintf("%d, ", entry.Key)
+		str += fmt.Sprintf("%T, ", entry.Key)
 	}
 
 	// remove last comma and space str if it exists
@@ -85,29 +86,29 @@ func (s *BinaryTreeSet) Formatted() string {
 // OrderedSet methods
 
 // First returns the first element of the set
-func (s *BinaryTreeSet) First() int {
+func (s *BinaryTreeSet[K]) First() K {
 	key, _ := s.innerMap.First()
 	return key
 }
 
 // Last returns the last element of the set
-func (s *BinaryTreeSet) Last() int {
+func (s *BinaryTreeSet[K]) Last() K {
 	key, _ := s.innerMap.Last()
 	return key
 }
 
 // RemoveFirst removes the first element of the set
-func (s *BinaryTreeSet) RemoveFirst() bool {
+func (s *BinaryTreeSet[K]) RemoveFirst() bool {
 	return s.innerMap.RemoveFirst()
 }
 
 // RemoveLast removes the last element of the set
-func (s *BinaryTreeSet) RemoveLast() bool {
+func (s *BinaryTreeSet[K]) RemoveLast() bool {
 	return s.innerMap.RemoveLast()
 }
 
 // ToSortedSlice returns an array of the elements of the set in order
-func (s *BinaryTreeSet) ToSortedSlice() []int {
+func (s *BinaryTreeSet[K]) ToSortedSlice() []K {
 	return s.innerMap.Keys()
 }
 
@@ -115,11 +116,11 @@ func (s *BinaryTreeSet) ToSortedSlice() []int {
 // Specialized methods
 
 // RightRotation performs a right rotation on the tree root node
-func (s *BinaryTreeSet) RightRotation() {
+func (s *BinaryTreeSet[K]) RightRotation() {
 	s.innerMap.RightRotation()
 }
 
 // LeftRotation performs a left rotation on the tree root node
-func (s *BinaryTreeSet) LeftRotation() {
+func (s *BinaryTreeSet[K]) LeftRotation() {
 	s.innerMap.LeftRotation()
 }
