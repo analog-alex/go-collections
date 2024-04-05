@@ -1,26 +1,26 @@
 package dict
 
-import "io.analogalex.collections/collections"
+import "utils-generics/collections"
 
-type Entry struct {
+type Entry[T any] struct {
 	Key int
-	Val string
+	Val T
 }
 
-type Map interface {
+type Map[T any] interface {
 	collections.Collection
-	Get(key int) (string, bool)
-	Put(key int, val string)
+	Get(key int) (T, bool)
+	Put(key int, val T)
 	Remove(key int) bool
 	ContainsKey(key int) bool
 
-	Entries() []Entry
+	Entries() []Entry[T]
 	Keys() []int
-	Values() []string
+	Values() []T
 }
 
-type OrderedMap interface {
-	Map
+type OrderedMap[T any] interface {
+	Map[T]
 	First() int
 	Last() int
 	RemoveFirst() bool

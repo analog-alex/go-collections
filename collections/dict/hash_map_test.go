@@ -6,7 +6,7 @@ import (
 )
 
 func TestHashTableSet_Put(t *testing.T) {
-	var m Map = MakeHashMap()
+	var m Map[string] = MakeHashMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 	m.Put(3, "three")
@@ -15,7 +15,7 @@ func TestHashTableSet_Put(t *testing.T) {
 }
 
 func TestHashTableSet_Size(t *testing.T) {
-	var m Map = MakeHashMap()
+	var m Map[string] = MakeHashMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 
@@ -23,20 +23,20 @@ func TestHashTableSet_Size(t *testing.T) {
 }
 
 func TestHashTableSet_IsEmpty(t *testing.T) {
-	var m Map = MakeHashMap()
+	var m Map[string] = MakeHashMap[string]()
 
 	assert.True(t, m.IsEmpty())
 }
 
 func TestHashTableSet_IsNotEmpty(t *testing.T) {
-	var m Map = MakeHashMap()
+	var m Map[string] = MakeHashMap[string]()
 	m.Put(1, "one")
 
 	assert.False(t, m.IsEmpty())
 }
 
 func TestHashTableSet_ContainsKey(t *testing.T) {
-	var m Map = MakeHashMap()
+	var m Map[string] = MakeHashMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 
@@ -44,14 +44,14 @@ func TestHashTableSet_ContainsKey(t *testing.T) {
 }
 
 func TestHashTableSet_DoesNotContain(t *testing.T) {
-	var m Map = MakeHashMap()
+	var m Map[string] = MakeHashMap[string]()
 	m.Put(1, "one")
 
 	assert.False(t, m.ContainsKey(2))
 }
 
 func TestHashTableSet_Remove(t *testing.T) {
-	var m Map = MakeHashMap()
+	var m Map[string] = MakeHashMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 
@@ -63,7 +63,7 @@ func TestHashTableSet_Remove(t *testing.T) {
 }
 
 func TestHashTableSet_RemoveNonExistent(t *testing.T) {
-	var m Map = MakeHashMap()
+	var m Map[string] = MakeHashMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 
@@ -75,7 +75,7 @@ func TestHashTableSet_RemoveNonExistent(t *testing.T) {
 }
 
 func TestHashMap_Get(t *testing.T) {
-	var m Map = MakeHashMap()
+	var m Map[string] = MakeHashMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 

@@ -6,7 +6,7 @@ import (
 )
 
 func TestFlatMap_Put(t *testing.T) {
-	var m Map = MakeFlatMap()
+	var m Map[string] = MakeFlatMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 	m.Put(3, "three")
@@ -15,7 +15,7 @@ func TestFlatMap_Put(t *testing.T) {
 }
 
 func TestFlatMap_Put_ConservesOrder(t *testing.T) {
-	var m Map = MakeFlatMap()
+	var m Map[string] = MakeFlatMap[string]()
 	m.Put(1, "one")
 	m.Put(3, "three")
 	m.Put(2, "two")
@@ -30,27 +30,27 @@ func TestFlatMap_Put_ConservesOrder(t *testing.T) {
 }
 
 func TestFlatMap_Size(t *testing.T) {
-	var m Map = MakeFlatMap()
+	var m Map[string] = MakeFlatMap[string]()
 	m.Put(1, "one")
 
 	assert.Equal(t, 1, m.Size())
 }
 
 func TestFlatMap_IsEmpty(t *testing.T) {
-	var m Map = MakeFlatMap()
+	var m Map[string] = MakeFlatMap[string]()
 
 	assert.True(t, m.IsEmpty())
 }
 
 func TestFlatMap_IsNotEmpty(t *testing.T) {
-	var m Map = MakeFlatMap()
+	var m Map[string] = MakeFlatMap[string]()
 	m.Put(1, "one")
 
 	assert.False(t, m.IsEmpty())
 }
 
 func TestFatMap_ContainsKey(t *testing.T) {
-	var m Map = MakeFlatMap()
+	var m Map[string] = MakeFlatMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 
@@ -59,7 +59,7 @@ func TestFatMap_ContainsKey(t *testing.T) {
 }
 
 func TestFlatMap_Remove(t *testing.T) {
-	var m Map = MakeFlatMap()
+	var m Map[string] = MakeFlatMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 
@@ -71,7 +71,7 @@ func TestFlatMap_Remove(t *testing.T) {
 }
 
 func TestFlatMap_RemoveNonExistent(t *testing.T) {
-	var m Map = MakeFlatMap()
+	var m Map[string] = MakeFlatMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 
@@ -83,7 +83,7 @@ func TestFlatMap_RemoveNonExistent(t *testing.T) {
 }
 
 func TestFlatMap_Get(t *testing.T) {
-	var m Map = MakeFlatMap()
+	var m Map[string] = MakeFlatMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 
@@ -93,7 +93,7 @@ func TestFlatMap_Get(t *testing.T) {
 }
 
 func TestFlatMap_GetNonExistent(t *testing.T) {
-	var m Map = MakeFlatMap()
+	var m Map[string] = MakeFlatMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 

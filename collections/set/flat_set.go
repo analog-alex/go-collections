@@ -1,20 +1,20 @@
 package set
 
-import "io.analogalex.collections/collections/dict"
+import "utils-generics/collections/dict"
 
 type FlatSet struct {
-	innerMap *dict.FlatMap
+	innerMap *dict.FlatMap[bool]
 }
 
 // MakeFlatSet creates a new FlatSet.
 func MakeFlatSet() *FlatSet {
-	return &FlatSet{innerMap: dict.MakeFlatMap()}
+	return &FlatSet{innerMap: dict.MakeFlatMap[bool]()}
 }
 
 // Add adds a new element to the set.
 // This operation is idempotent, so if the element already exists in the set, it is equivalent to a no-op.
 func (s *FlatSet) Add(val int) {
-	s.innerMap.Put(val, "")
+	s.innerMap.Put(val, true)
 }
 
 // Remove removes an element from the set.

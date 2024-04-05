@@ -1,72 +1,52 @@
 package dict
 
-type flatMapEntry struct {
-	key int
-	val string
+type FlatMap[T any] struct {
+	array []Entry[T]
 }
 
-type FlatMap struct {
-	array []flatMapEntry
-}
-
-func MakeFlatMap() *FlatMap {
-	return &FlatMap{}
+func MakeFlatMap[T any]() *FlatMap[T] {
+	return &FlatMap[T]{}
 }
 
 /*
-*
-
-	Binary search for the key in the array.
-	We keep the array sorted by key, so we can use binary search to find the key.
-*/
-func (s *FlatMap) binarySearch(key int) (flatMapEntry, bool) {
+* Binary search for the key in the array.
+* We keep the array sorted by key, so we can use binary search to find the key.
+ */
+func (s *FlatMap[T]) binarySearch(key int) (Entry[T], bool) {
 	l, h := 0, len(s.array)-1
 	for l <= h {
 		m := (l + h) / 2
-		if s.array[m].key == key {
+		if s.array[m].Key == key {
 			return s.array[m], true
 		}
 
-		if s.array[m].key < key {
+		if s.array[m].Key < key {
 			l = m + 1
 		} else {
 			h = m - 1
 		}
 	}
 
-	return flatMapEntry{}, false
+	return Entry[T]{}, false
 }
 
 // Put inserts a new key-value pair into the map. If the key already exists, the value is updated.
-func (s *FlatMap) Put(key int, val string) {
-	var index int
+func (s *FlatMap[T]) Put(key int, val T) {
+	s.array = append(s.array, Entry[T]{Key: key, Val: val})
 
-	// find the index where the key should be inserted
-	for i, entry := range s.array {
-		if entry.key < key {
-			index = i + 1
+	for i := len(s.array) - 1; i > 0; i-- {
+		// conserve the well ordering of the array elements
+		if s.array[i].Key < s.array[i-1].Key {
+			s.array[i], s.array[i-1] = s.array[i-1], s.array[i]
+		} else {
+			break
 		}
-
-		// if we find the key, update the value in place
-		if entry.key == key {
-			s.array[i].val = val
-			return
-		}
-	}
-
-	// to maintain order, create a new array with the new entry in the correct position
-	if index == len(s.array) {
-		s.array = append(s.array, flatMapEntry{key: key, val: val})
-	} else if index == 0 {
-		s.array = append([]flatMapEntry{{key: key, val: val}}, s.array...)
-	} else {
-		s.array = append(s.array[:index], append([]flatMapEntry{{key: key, val: val}}, s.array[index:]...)...)
 	}
 }
 
-func (s *FlatMap) Remove(key int) bool {
+func (s *FlatMap[T]) Remove(key int) bool {
 	for i, entry := range s.array {
-		if entry.key == key {
+		if entry.Key == key {
 			s.array = append(s.array[:i], s.array[i+1:]...)
 			return true
 		}
@@ -75,61 +55,62 @@ func (s *FlatMap) Remove(key int) bool {
 	return false
 }
 
-func (s *FlatMap) Get(key int) (string, bool) {
+func (s *FlatMap[T]) Get(key int) (T, bool) {
 	l, ok := s.binarySearch(key)
 	if !ok {
-		return "", false
+		var zero T
+		return zero, false
 	}
-	return l.val, true
+	return l.Val, true
 }
 
-func (s *FlatMap) ContainsKey(key int) bool {
+func (s *FlatMap[T]) ContainsKey(key int) bool {
 	_, ok := s.binarySearch(key)
 	return ok
 }
 
-func (s *FlatMap) Size() int {
+func (s *FlatMap[T]) Size() int {
 	return len(s.array)
 }
 
-func (s *FlatMap) IsEmpty() bool {
+func (s *FlatMap[T]) IsEmpty() bool {
 	return len(s.array) == 0
 }
 
-func (s *FlatMap) IsNotEmpty() bool {
+func (s *FlatMap[T]) IsNotEmpty() bool {
 	return !s.IsEmpty()
 }
 
-func (s *FlatMap) Clear() {
-	s.array = []flatMapEntry{}
+func (s *FlatMap[T]) Clear() {
+	s.array = []Entry[T]{}
 }
 
-func (s *FlatMap) Formatted() string {
+func (s *FlatMap[T]) Formatted() string {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *FlatMap) Entries() []Entry {
-	var entries []Entry
+func (s *FlatMap[T]) Entries() []Entry[T] {
+	var entries []Entry[T]
 	for _, entry := range s.array {
-		entries = append(entries, Entry{Key: entry.key, Val: entry.val})
+		entries = append(entries, Entry[T]{Key: entry.Key, Val: entry.Val})
 	}
 	return entries
 }
 
-func (s *FlatMap) Keys() []int {
+func (s *FlatMap[T]) Keys() []int {
 	var keys []int
 	for _, entry := range s.array {
-		keys = append(keys, entry.key)
+		keys = append(keys, entry.Key)
 	}
 
 	return keys
 }
 
-func (s *FlatMap) Values() []string {
-	var values []string
+func (s *FlatMap[T]) Values() []T {
+	var values []T
 	for _, entry := range s.array {
-		values = append(values, entry.val)
+		values = append(values, entry.Val)
 	}
 
 	return values

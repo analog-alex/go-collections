@@ -2,7 +2,7 @@ package set
 
 import (
 	"fmt"
-	"io.analogalex.collections/collections/dict"
+	"utils-generics/collections/dict"
 )
 
 // HashSet is a set implementation using a hash map -- roughly speaking it implements a hash table solution.
@@ -19,18 +19,18 @@ import (
 //
 // - Contains: O(1)
 type HashSet struct {
-	innerMap *dict.HashMap
+	innerMap *dict.HashMap[bool]
 }
 
 // MakeHashSet creates a new HashSet.
 func MakeHashSet() *HashSet {
-	return &HashSet{innerMap: dict.MakeHashMap()}
+	return &HashSet{innerMap: dict.MakeHashMap[bool]()}
 }
 
 // Add adds a new element to the set.
 // This operation is idempotent, so if the element already exists in the set, it is equivalent to a no-op.
 func (s *HashSet) Add(val int) {
-	s.innerMap.Put(val, "")
+	s.innerMap.Put(val, true)
 }
 
 // Remove removes an element from the set.

@@ -6,7 +6,7 @@ import (
 )
 
 func TestBinaryTreeMap_Put(t *testing.T) {
-	var m Map = MakeBinaryTreeMap()
+	var m Map[string] = MakeBinaryTreeMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 	m.Put(3, "three")
@@ -15,7 +15,7 @@ func TestBinaryTreeMap_Put(t *testing.T) {
 }
 
 func TestBinaryTreeMap_Size(t *testing.T) {
-	var m Map = MakeBinaryTreeMap()
+	var m Map[string] = MakeBinaryTreeMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 
@@ -23,20 +23,20 @@ func TestBinaryTreeMap_Size(t *testing.T) {
 }
 
 func TestBinaryTreeMap_IsEmpty(t *testing.T) {
-	var m Map = MakeBinaryTreeMap()
+	var m Map[string] = MakeBinaryTreeMap[string]()
 
 	assert.True(t, m.IsEmpty())
 }
 
 func TestBinaryTreeMap_IsNotEmpty(t *testing.T) {
-	var m Map = MakeBinaryTreeMap()
+	var m Map[string] = MakeBinaryTreeMap[string]()
 	m.Put(1, "one")
 
 	assert.False(t, m.IsEmpty())
 }
 
 func TestBinaryTreeMap_ContainsKey(t *testing.T) {
-	var m Map = MakeBinaryTreeMap()
+	var m Map[string] = MakeBinaryTreeMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 
@@ -44,14 +44,14 @@ func TestBinaryTreeMap_ContainsKey(t *testing.T) {
 }
 
 func TestBinaryTreeMap_DoesNotContain(t *testing.T) {
-	var m Map = MakeBinaryTreeMap()
+	var m Map[string] = MakeBinaryTreeMap[string]()
 	m.Put(1, "one")
 
 	assert.False(t, m.ContainsKey(2))
 }
 
 func TestBinaryTreeMap_Remove(t *testing.T) {
-	var m Map = MakeBinaryTreeMap()
+	var m Map[string] = MakeBinaryTreeMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 
@@ -63,7 +63,7 @@ func TestBinaryTreeMap_Remove(t *testing.T) {
 }
 
 func TestBinaryTreeMap_RemoveNonExistent(t *testing.T) {
-	var m Map = MakeBinaryTreeMap()
+	var m Map[string] = MakeBinaryTreeMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 
@@ -75,7 +75,7 @@ func TestBinaryTreeMap_RemoveNonExistent(t *testing.T) {
 }
 
 func TestBinaryTreeMap_Get(t *testing.T) {
-	var m Map = MakeBinaryTreeMap()
+	var m Map[string] = MakeBinaryTreeMap[string]()
 	m.Put(1, "one")
 	m.Put(2, "two")
 

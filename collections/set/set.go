@@ -1,6 +1,6 @@
 package set
 
-import "io.analogalex.collections/collections"
+import "utils-generics/collections"
 
 type Set interface {
 	collections.Collection
