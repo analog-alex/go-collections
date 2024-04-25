@@ -26,12 +26,12 @@ func MakeHashMap[K any, T any](h func(K) int) *HashMap[K, T] {
 // If an entry with the key already exists the value is updated with the one provided
 func (s *HashMap[K, T]) Put(key K, val T) {
 	hash := s.hasher(key) % defaultHashTableSize
-	if s.table[hash] == nil {
+	node := s.table[hash]
+	if node == nil {
 		s.table[hash] = &hashTableEntry[K, T]{Entry: Entry[K, T]{Key: key, Val: val}}
 		return
 	}
 
-	node := s.table[hash]
 	for {
 		if reflect.DeepEqual(node.Key, key) {
 			node.Val = val
@@ -49,11 +49,11 @@ func (s *HashMap[K, T]) Put(key K, val T) {
 // and false if the entry was not found
 func (s *HashMap[K, T]) Remove(key K) bool {
 	hash := s.hasher(key) % defaultHashTableSize
-	if s.table[hash] == nil {
+	node := s.table[hash]
+	if node == nil {
 		return false
 	}
 
-	node := s.table[hash]
 	var prev *hashTableEntry[K, T]
 	for {
 		if reflect.DeepEqual(node.Key, key) {
@@ -75,11 +75,11 @@ func (s *HashMap[K, T]) Remove(key K) bool {
 // ContainsKey returns true if the map contains an entry with the provided key and false if otherwise
 func (s *HashMap[K, T]) ContainsKey(key K) bool {
 	hash := s.hasher(key) % defaultHashTableSize
-	if s.table[hash] == nil {
+	node := s.table[hash]
+	if node == nil {
 		return false
 	}
 
-	node := s.table[hash]
 	for {
 		if reflect.DeepEqual(node.Key, key) {
 			return true
@@ -95,11 +95,11 @@ func (s *HashMap[K, T]) ContainsKey(key K) bool {
 func (s *HashMap[K, T]) Get(key K) (T, bool) {
 	var zero T
 	hash := s.hasher(key) % defaultHashTableSize
-	if s.table[hash] == nil {
+	node := s.table[hash]
+	if node == nil {
 		return zero, false
 	}
 
-	node := s.table[hash]
 	for {
 		if reflect.DeepEqual(node.Key, key) {
 			return node.Val, true

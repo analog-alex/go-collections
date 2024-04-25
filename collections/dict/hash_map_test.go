@@ -89,3 +89,18 @@ func TestHashMap_Get(t *testing.T) {
 	assert.False(t, ok)
 	assert.Equal(t, "", val)
 }
+
+func TestHashMap_Collisions(t *testing.T) {
+	var m Map[int, string] = MakeHashMap[int, string](intHasher)
+	m.Put(1, "one")
+	m.Put(128+1, "one hundred twenty eight plus one") // this should collide with one -- check if the defaults changed and this is still the case
+
+	val, ok := m.Get(1)
+	assert.True(t, ok)
+	assert.Equal(t, "one", val)
+
+	val, ok = m.Get(128 + 1)
+
+	assert.True(t, ok)
+	assert.Equal(t, "one hundred twenty eight plus one", val)
+}
