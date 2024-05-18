@@ -2,18 +2,18 @@ package set
 
 import "utils-generics/collections"
 
-type Set interface {
+type Set[K any] interface {
 	collections.Collection
-	Add(val int)
-	Remove(val int) bool
-	Contains(val int) bool
+	Add(val K)
+	Remove(val K) bool
+	Contains(val K) bool
 }
 
-type OrderedSet interface {
-	Set
-	First() int
-	Last() int
+type OrderedSet[K any] interface {
+	Set[K]
+	First() K
+	Last() K
 	RemoveFirst() bool
 	RemoveLast() bool
-	ToSortedSlice() []int
+	ToSortedSlice() []K
 }

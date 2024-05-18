@@ -5,8 +5,12 @@ import (
 	"testing"
 )
 
+func h(i int) int {
+	return i
+}
+
 func TestHashTableSet_Add(t *testing.T) {
-	var s Set = MakeHashSet()
+	var s Set[int] = MakeHashSet[int](h)
 	s.Add(1)
 	s.Add(2)
 	s.Add(3)
@@ -15,7 +19,7 @@ func TestHashTableSet_Add(t *testing.T) {
 }
 
 func TestHashTableSet_Size(t *testing.T) {
-	var s Set = MakeHashSet()
+	var s Set[int] = MakeHashSet[int](h)
 	s.Add(1)
 	s.Add(2)
 
@@ -23,34 +27,34 @@ func TestHashTableSet_Size(t *testing.T) {
 }
 
 func TestHashTableSet_IsEmpty(t *testing.T) {
-	var s Set = MakeHashSet()
+	var s Set[int] = MakeHashSet[int](h)
 
 	assert.True(t, s.IsEmpty())
 }
 
 func TestHashTableSet_IsNotEmpty(t *testing.T) {
-	var s Set = MakeHashSet()
+	var s Set[int] = MakeHashSet[int](h)
 	s.Add(1)
 
 	assert.False(t, s.IsEmpty())
 }
 
 func TestHashTableSet_Contains(t *testing.T) {
-	var s Set = MakeHashSet()
+	var s Set[int] = MakeHashSet[int](h)
 	s.Add(1)
 
 	assert.True(t, s.Contains(1))
 }
 
 func TestHashTableSet_DoesNotContain(t *testing.T) {
-	var s Set = MakeHashSet()
+	var s Set[int] = MakeHashSet[int](h)
 	s.Add(1)
 
 	assert.False(t, s.Contains(2))
 }
 
 func TestHashTableSet_Remove(t *testing.T) {
-	var s Set = MakeHashSet()
+	var s Set[int] = MakeHashSet[int](h)
 	s.Add(1)
 	s.Add(2)
 
@@ -62,7 +66,7 @@ func TestHashTableSet_Remove(t *testing.T) {
 }
 
 func TestHashTableSet_RemoveNonExistent(t *testing.T) {
-	var s Set = MakeHashSet()
+	var s Set[int] = MakeHashSet[int](h)
 	s.Add(1)
 	s.Add(2)
 

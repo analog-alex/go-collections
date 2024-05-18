@@ -4,15 +4,15 @@ import (
 	"fmt"
 )
 
-type binaryTreeNode[T any] struct {
-	Entry[T]
-	left  *binaryTreeNode[T]
-	right *binaryTreeNode[T]
+type binaryTreeNode[K any, T any] struct {
+	Entry[K, T]
+	left  *binaryTreeNode[K, T]
+	right *binaryTreeNode[K, T]
 }
 
 // BinaryTreeMap is a map implementation using a binary tree -- roughly speaking it implements a binary tree solution.
 //
-// It stores its keys in natural order i.e. ints are stores in ascending order, strings are stored in alphabetical order.
+// It stores its keys in natural order i.e. int's are stored in ascending order, strings are stored in alphabetical order.
 // It is not thread safe and should not be used for concurrent access
 // (see concurrent package for thread safe implementations).
 //
@@ -23,36 +23,38 @@ type binaryTreeNode[T any] struct {
 // - Get: O(log n)
 //
 // - Remove: O(log n)
-type BinaryTreeMap[T any] struct {
-	root *binaryTreeNode[T]
+type BinaryTreeMap[K any, T any] struct {
+	root       *binaryTreeNode[K, T]
+	comparator func(a, b K) int
 }
 
 // MakeBinaryTreeMap creates a new BinaryTreeMap
-func MakeBinaryTreeMap[T any]() *BinaryTreeMap[T] {
-	return &BinaryTreeMap[T]{}
+func MakeBinaryTreeMap[K any, T any](c func(a, b K) int) *BinaryTreeMap[K, T] {
+	return &BinaryTreeMap[K, T]{comparator: c}
 }
 
 // Put adds a new entry to the map. If the key already exists, it is overwritten.
 //
 // Time complexity: O(log n)
-func (s *BinaryTreeMap[T]) Put(key int, val T) {
+func (s *BinaryTreeMap[K, T]) Put(key K, val T) {
 	if s.root == nil {
-		s.root = &binaryTreeNode[T]{Entry: Entry[T]{Key: key, Val: val}}
+		s.root = &binaryTreeNode[K, T]{Entry: Entry[K, T]{Key: key, Val: val}}
 		return
 	}
 
 	// TODO balance tree on inserts
 	node := s.root
 	for {
-		if key < node.Key {
+		c := s.comparator(key, node.Key)
+		if c < 0 {
 			if node.left == nil {
-				node.left = &binaryTreeNode[T]{Entry: Entry[T]{Key: key, Val: val}}
+				node.left = &binaryTreeNode[K, T]{Entry: Entry[K, T]{Key: key, Val: val}}
 				return
 			}
 			node = node.left
-		} else if key > node.Key {
+		} else if c > 0 {
 			if node.right == nil {
-				node.right = &binaryTreeNode[T]{Entry: Entry[T]{Key: key, Val: val}}
+				node.right = &binaryTreeNode[K, T]{Entry: Entry[K, T]{Key: key, Val: val}}
 				return
 			}
 			node = node.right
@@ -65,15 +67,16 @@ func (s *BinaryTreeMap[T]) Put(key int, val T) {
 // Remove removes an entry from map
 //
 // Time complexity: O(log n)
-func (s *BinaryTreeMap[T]) Remove(key int) bool {
-	var parent *binaryTreeNode[T]
+func (s *BinaryTreeMap[K, T]) Remove(key K) bool {
+	var parent *binaryTreeNode[K, T]
 	node := s.root
 
 	for node != nil {
-		if key < node.Key {
+		c := s.comparator(key, node.Key)
+		if c < 0 {
 			parent = node
 			node = node.left
-		} else if key > node.Key {
+		} else if c > 0 {
 			parent = node
 			node = node.right
 		} else {
@@ -91,7 +94,7 @@ func (s *BinaryTreeMap[T]) Remove(key int) bool {
 	return false
 }
 
-func removeNode[T any](node *binaryTreeNode[T]) *binaryTreeNode[T] {
+func removeNode[K any, T any](node *binaryTreeNode[K, T]) *binaryTreeNode[K, T] {
 	if node.left == nil {
 		return node.right
 	} else if node.right == nil {
@@ -105,7 +108,7 @@ func removeNode[T any](node *binaryTreeNode[T]) *binaryTreeNode[T] {
 	return node
 }
 
-func findMinNode[T any](node *binaryTreeNode[T]) *binaryTreeNode[T] {
+func findMinNode[K any, T any](node *binaryTreeNode[K, T]) *binaryTreeNode[K, T] {
 	minNode := node
 	for minNode.left != nil {
 		minNode = minNode.left
@@ -117,12 +120,13 @@ func findMinNode[T any](node *binaryTreeNode[T]) *binaryTreeNode[T] {
 // If the key does not exist, the second return value is false.
 //
 // Time complexity: O(log n)
-func (s *BinaryTreeMap[T]) Get(key int) (T, bool) {
+func (s *BinaryTreeMap[K, T]) Get(key K) (T, bool) {
 	node := s.root
 	for node != nil {
-		if key < node.Key {
+		c := s.comparator(key, node.Key)
+		if c < 0 {
 			node = node.left
-		} else if key > node.Key {
+		} else if c > 0 {
 			node = node.right
 		} else {
 			// how should we return the value
@@ -135,12 +139,13 @@ func (s *BinaryTreeMap[T]) Get(key int) (T, bool) {
 }
 
 // ContainsKey checks if a given keu exists in the map
-func (s *BinaryTreeMap[T]) ContainsKey(key int) bool {
+func (s *BinaryTreeMap[K, T]) ContainsKey(key K) bool {
 	node := s.root
 	for node != nil {
-		if key < node.Key {
+		c := s.comparator(key, node.Key)
+		if c < 0 {
 			node = node.left
-		} else if key > node.Key {
+		} else if c > 0 {
 			node = node.right
 		} else {
 			return true
@@ -150,11 +155,11 @@ func (s *BinaryTreeMap[T]) ContainsKey(key int) bool {
 }
 
 // Size returns the size of the set
-func (s *BinaryTreeMap[T]) Size() int {
+func (s *BinaryTreeMap[K, T]) Size() int {
 	return size(s.root)
 }
 
-func size[T any](node *binaryTreeNode[T]) int {
+func size[K any, T any](node *binaryTreeNode[K, T]) int {
 	if node == nil {
 		return 0
 	}
@@ -162,58 +167,58 @@ func size[T any](node *binaryTreeNode[T]) int {
 }
 
 // IsEmpty checks if the set is empty
-func (s *BinaryTreeMap[T]) IsEmpty() bool {
+func (s *BinaryTreeMap[K, T]) IsEmpty() bool {
 	return s.root == nil
 }
 
 // IsNotEmpty checks if the set is not empty
-func (s *BinaryTreeMap[T]) IsNotEmpty() bool {
+func (s *BinaryTreeMap[K, T]) IsNotEmpty() bool {
 	return s.root != nil
 }
 
 // Clear removes all elements from the set
-func (s *BinaryTreeMap[T]) Clear() {
+func (s *BinaryTreeMap[K, T]) Clear() {
 	s.root = nil
 }
 
 // Formatted returns a string representation of the set
-func (s *BinaryTreeMap[T]) Formatted() string {
+func (s *BinaryTreeMap[K, T]) Formatted() string {
 	return formatted(s.root)
 }
 
-func formatted[T any](node *binaryTreeNode[T]) string {
+func formatted[K any, T any](node *binaryTreeNode[K, T]) string {
 	if node == nil {
 		return ""
 	}
 
-	return fmt.Sprintf("(%s) - %d - (%s)", formatted(node.left), node.Key, formatted(node.right))
+	return fmt.Sprintf("(%s) - %T - (%s)", formatted(node.left), node.Key, formatted(node.right))
 }
 
-func (s *BinaryTreeMap[T]) Entries() []Entry[T] {
-	var entries []Entry[T]
-	transverse(s.root, func(node *binaryTreeNode[T]) {
-		entries = append(entries, Entry[T]{Key: node.Key, Val: node.Val})
+func (s *BinaryTreeMap[K, T]) Entries() []Entry[K, T] {
+	var entries []Entry[K, T]
+	transverse(s.root, func(node *binaryTreeNode[K, T]) {
+		entries = append(entries, Entry[K, T]{Key: node.Key, Val: node.Val})
 	})
 	return entries
 }
 
-func (s *BinaryTreeMap[T]) Keys() []int {
-	var keys []int
-	transverse(s.root, func(node *binaryTreeNode[T]) {
+func (s *BinaryTreeMap[K, T]) Keys() []K {
+	var keys []K
+	transverse(s.root, func(node *binaryTreeNode[K, T]) {
 		keys = append(keys, node.Key)
 	})
 	return keys
 }
 
-func (s *BinaryTreeMap[T]) Values() []T {
+func (s *BinaryTreeMap[K, T]) Values() []T {
 	var values []T
-	transverse(s.root, func(node *binaryTreeNode[T]) {
+	transverse(s.root, func(node *binaryTreeNode[K, T]) {
 		values = append(values, node.Val)
 	})
 	return values
 }
 
-func transverse[T any](node *binaryTreeNode[T], visit func(node *binaryTreeNode[T])) {
+func transverse[K any, T any](node *binaryTreeNode[K, T], visit func(node *binaryTreeNode[K, T])) {
 	if node == nil {
 		return
 	}
@@ -227,10 +232,11 @@ func transverse[T any](node *binaryTreeNode[T], visit func(node *binaryTreeNode[
 // OrderedMap methods
 
 // First returns the first entry of the map
-func (s *BinaryTreeMap[T]) First() (int, T) {
+func (s *BinaryTreeMap[K, T]) First() (K, T) {
+	var zkey K
 	var zero T
 	if s.root == nil {
-		return 0, zero
+		return zkey, zero
 	}
 
 	node := s.root
@@ -241,10 +247,11 @@ func (s *BinaryTreeMap[T]) First() (int, T) {
 }
 
 // Last returns the last entry of the map
-func (s *BinaryTreeMap[T]) Last() (int, T) {
+func (s *BinaryTreeMap[K, T]) Last() (K, T) {
+	var zkey K
 	var zero T
 	if s.root == nil {
-		return 0, zero
+		return zkey, zero
 	}
 
 	node := s.root
@@ -255,8 +262,8 @@ func (s *BinaryTreeMap[T]) Last() (int, T) {
 }
 
 // RemoveFirst removes the first element of the set
-func (s *BinaryTreeMap[T]) RemoveFirst() bool {
-	var parent *binaryTreeNode[T]
+func (s *BinaryTreeMap[K, T]) RemoveFirst() bool {
+	var parent *binaryTreeNode[K, T]
 	node := s.root
 
 	for node.left != nil {
@@ -274,8 +281,8 @@ func (s *BinaryTreeMap[T]) RemoveFirst() bool {
 }
 
 // RemoveLast removes the last element of the set
-func (s *BinaryTreeMap[T]) RemoveLast() bool {
-	var parent *binaryTreeNode[T]
+func (s *BinaryTreeMap[K, T]) RemoveLast() bool {
+	var parent *binaryTreeNode[K, T]
 	node := s.root
 
 	for node.right != nil {
@@ -296,16 +303,16 @@ func (s *BinaryTreeMap[T]) RemoveLast() bool {
 // Specialized methods
 
 // RightRotation performs a right rotation on the tree root node
-func (s *BinaryTreeMap[T]) RightRotation() {
+func (s *BinaryTreeMap[K, T]) RightRotation() {
 	rightRotationOnNode(s.root)
 }
 
 // LeftRotation performs a left rotation on the tree root node
-func (s *BinaryTreeMap[T]) LeftRotation() {
+func (s *BinaryTreeMap[K, T]) LeftRotation() {
 	leftRotationOnNode(s.root)
 }
 
-func rightRotationOnNode[T any](node *binaryTreeNode[T]) {
+func rightRotationOnNode[K any, T any](node *binaryTreeNode[K, T]) {
 	if node == nil {
 		return
 	}
@@ -315,7 +322,7 @@ func rightRotationOnNode[T any](node *binaryTreeNode[T]) {
 	leftTree.right = node
 }
 
-func leftRotationOnNode[T any](node *binaryTreeNode[T]) {
+func leftRotationOnNode[K any, T any](node *binaryTreeNode[K, T]) {
 	if node == nil {
 		return
 	}

@@ -1,40 +1,44 @@
 package dict
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 const defaultHashTableSize = 128
 
-type hashTableEntry[T any] struct {
-	Entry[T]
-	next *hashTableEntry[T]
+type hashTableEntry[K any, T any] struct {
+	Entry[K, T]
+	next *hashTableEntry[K, T]
 }
 
-type HashMap[T any] struct {
-	table [defaultHashTableSize]*hashTableEntry[T]
+type HashMap[K any, T any] struct {
+	table  [defaultHashTableSize]*hashTableEntry[K, T]
+	hasher func(K) int
 }
 
-func MakeHashMap[T any]() *HashMap[T] {
-	return &HashMap[T]{}
+func MakeHashMap[K any, T any](h func(K) int) *HashMap[K, T] {
+	return &HashMap[K, T]{hasher: h}
 }
 
 // Put adds a new entry to the map.
 //
 // If an entry with the key already exists the value is updated with the one provided
-func (s *HashMap[T]) Put(key int, val T) {
-	hash := key % defaultHashTableSize
-	if s.table[hash] == nil {
-		s.table[hash] = &hashTableEntry[T]{Entry: Entry[T]{Key: key, Val: val}}
+func (s *HashMap[K, T]) Put(key K, val T) {
+	hash := s.hasher(key) % defaultHashTableSize
+	node := s.table[hash]
+	if node == nil {
+		s.table[hash] = &hashTableEntry[K, T]{Entry: Entry[K, T]{Key: key, Val: val}}
 		return
 	}
 
-	node := s.table[hash]
 	for {
-		if node.Key == key {
+		if reflect.DeepEqual(node.Key, key) {
 			node.Val = val
 			return
 		}
 		if node.next == nil {
-			node.next = &hashTableEntry[T]{Entry: Entry[T]{Key: key, Val: val}}
+			node.next = &hashTableEntry[K, T]{Entry: Entry[K, T]{Key: key, Val: val}}
 			return
 		}
 		node = node.next
@@ -43,16 +47,16 @@ func (s *HashMap[T]) Put(key int, val T) {
 
 // Remove removes the entry identified by the key, returning true if the entry was found and removed
 // and false if the entry was not found
-func (s *HashMap[T]) Remove(key int) bool {
-	hash := key % defaultHashTableSize
-	if s.table[hash] == nil {
+func (s *HashMap[K, T]) Remove(key K) bool {
+	hash := s.hasher(key) % defaultHashTableSize
+	node := s.table[hash]
+	if node == nil {
 		return false
 	}
 
-	node := s.table[hash]
-	var prev *hashTableEntry[T]
+	var prev *hashTableEntry[K, T]
 	for {
-		if node.Key == key {
+		if reflect.DeepEqual(node.Key, key) {
 			if prev == nil {
 				s.table[hash] = node.next
 			} else {
@@ -69,15 +73,15 @@ func (s *HashMap[T]) Remove(key int) bool {
 }
 
 // ContainsKey returns true if the map contains an entry with the provided key and false if otherwise
-func (s *HashMap[T]) ContainsKey(key int) bool {
-	hash := key % defaultHashTableSize
-	if s.table[hash] == nil {
+func (s *HashMap[K, T]) ContainsKey(key K) bool {
+	hash := s.hasher(key) % defaultHashTableSize
+	node := s.table[hash]
+	if node == nil {
 		return false
 	}
 
-	node := s.table[hash]
 	for {
-		if node.Key == key {
+		if reflect.DeepEqual(node.Key, key) {
 			return true
 		}
 		if node.next == nil {
@@ -88,16 +92,16 @@ func (s *HashMap[T]) ContainsKey(key int) bool {
 }
 
 // Get returns the value associated with the provided key and true if the key was found and false if otherwise
-func (s *HashMap[T]) Get(key int) (T, bool) {
+func (s *HashMap[K, T]) Get(key K) (T, bool) {
 	var zero T
-	hash := key % defaultHashTableSize
-	if s.table[hash] == nil {
+	hash := s.hasher(key) % defaultHashTableSize
+	node := s.table[hash]
+	if node == nil {
 		return zero, false
 	}
 
-	node := s.table[hash]
 	for {
-		if node.Key == key {
+		if reflect.DeepEqual(node.Key, key) {
 			return node.Val, true
 		}
 		if node.next == nil {
@@ -108,7 +112,7 @@ func (s *HashMap[T]) Get(key int) (T, bool) {
 }
 
 // Size returns the number of entries in the map
-func (s *HashMap[T]) Size() int {
+func (s *HashMap[K, T]) Size() int {
 	size := 0
 	for _, node := range s.table {
 		if node != nil {
@@ -123,23 +127,23 @@ func (s *HashMap[T]) Size() int {
 }
 
 // IsEmpty returns true if the map is empty and false if otherwise
-func (s *HashMap[T]) IsEmpty() bool {
+func (s *HashMap[K, T]) IsEmpty() bool {
 	return s.Size() == 0
 }
 
 // IsNotEmpty returns true if the map is not empty and false if otherwise
-func (s *HashMap[T]) IsNotEmpty() bool {
+func (s *HashMap[K, T]) IsNotEmpty() bool {
 	return !s.IsEmpty()
 }
 
 // Formatted returns a string representation of the map
-func (s *HashMap[T]) Formatted() string {
+func (s *HashMap[K, T]) Formatted() string {
 	str := "{"
 	for _, node := range s.table {
 		if node != nil {
-			str += fmt.Sprintf("%d: %T, ", node.Key, node.Val)
+			str += fmt.Sprintf("%T: %T, ", node.Key, node.Val)
 			for node.next != nil {
-				str += ", " + fmt.Sprintf("%d: %T, ", node.Key, node.Val)
+				str += ", " + fmt.Sprintf("%T: %T, ", node.Key, node.Val)
 				node = node.next
 			}
 		}
@@ -153,18 +157,18 @@ func (s *HashMap[T]) Formatted() string {
 }
 
 // Clear removes all entries from the map
-func (s *HashMap[T]) Clear() {
-	s.table = [defaultHashTableSize]*hashTableEntry[T]{}
+func (s *HashMap[K, T]) Clear() {
+	s.table = [defaultHashTableSize]*hashTableEntry[K, T]{}
 }
 
 // Entries returns a slice of all entries in the map
-func (s *HashMap[T]) Entries() []Entry[T] {
-	entries := make([]Entry[T], 0, s.Size())
+func (s *HashMap[K, T]) Entries() []Entry[K, T] {
+	entries := make([]Entry[K, T], 0, s.Size())
 	for _, node := range s.table {
 		if node != nil {
-			entries = append(entries, Entry[T]{Key: node.Key, Val: node.Val})
+			entries = append(entries, Entry[K, T]{Key: node.Key, Val: node.Val})
 			for node.next != nil {
-				entries = append(entries, Entry[T]{Key: node.Key, Val: node.Val})
+				entries = append(entries, Entry[K, T]{Key: node.Key, Val: node.Val})
 				node = node.next
 			}
 		}
@@ -173,8 +177,8 @@ func (s *HashMap[T]) Entries() []Entry[T] {
 }
 
 // Keys returns a slice of all keys in the map
-func (s *HashMap[T]) Keys() []int {
-	keys := make([]int, 0, s.Size())
+func (s *HashMap[K, T]) Keys() []K {
+	keys := make([]K, 0, s.Size())
 	for _, node := range s.table {
 		if node != nil {
 			keys = append(keys, node.Key)
@@ -188,7 +192,7 @@ func (s *HashMap[T]) Keys() []int {
 }
 
 // Values returns a slice of all values in the map
-func (s *HashMap[T]) Values() []T {
+func (s *HashMap[K, T]) Values() []T {
 	values := make([]T, 0, s.Size())
 	for _, node := range s.table {
 		if node != nil {
