@@ -3,10 +3,11 @@ package set
 import (
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"utils-generics/collections/types"
 )
 
 func TestBinaryTreeSet_Add(t *testing.T) {
-	var s Set[int] = MakeBinaryTreeSet[int](c)
+	var s Set[int] = MakeBinaryTreeSet[int](types.IntComparator)
 	s.Add(1)
 	s.Add(2)
 	s.Add(3)
@@ -15,7 +16,7 @@ func TestBinaryTreeSet_Add(t *testing.T) {
 }
 
 func TestBinaryTreeSet_Size(t *testing.T) {
-	var s Set[int] = MakeBinaryTreeSet[int](c)
+	var s Set[int] = MakeBinaryTreeSet[int](types.IntComparator)
 	s.Add(1)
 	s.Add(2)
 
@@ -23,34 +24,34 @@ func TestBinaryTreeSet_Size(t *testing.T) {
 }
 
 func TestBinaryTreeSet_IsEmpty(t *testing.T) {
-	var s Set[int] = MakeBinaryTreeSet[int](c)
+	var s Set[int] = MakeBinaryTreeSet[int](types.IntComparator)
 
 	assert.True(t, s.IsEmpty())
 }
 
 func TestBinaryTreeSet_IsNotEmpty(t *testing.T) {
-	var s Set[int] = MakeBinaryTreeSet[int](c)
+	var s Set[int] = MakeBinaryTreeSet[int](types.IntComparator)
 	s.Add(1)
 
 	assert.False(t, s.IsEmpty())
 }
 
 func TestBinaryTreeSet_Contains(t *testing.T) {
-	var s Set[int] = MakeBinaryTreeSet[int](c)
+	var s Set[int] = MakeBinaryTreeSet[int](types.IntComparator)
 	s.Add(1)
 
 	assert.True(t, s.Contains(1))
 }
 
 func TestBinaryTreeSet_DoesNotContain(t *testing.T) {
-	var s Set[int] = MakeBinaryTreeSet[int](c)
+	var s Set[int] = MakeBinaryTreeSet[int](types.IntComparator)
 	s.Add(1)
 
 	assert.False(t, s.Contains(2))
 }
 
 func TestBinaryTreeSet_Remove(t *testing.T) {
-	var s Set[int] = MakeBinaryTreeSet[int](c)
+	var s Set[int] = MakeBinaryTreeSet[int](types.IntComparator)
 	s.Add(1)
 	s.Add(2)
 
@@ -62,7 +63,7 @@ func TestBinaryTreeSet_Remove(t *testing.T) {
 }
 
 func TestBinaryTreeSet_RemoveNonExistent(t *testing.T) {
-	var s Set[int] = MakeBinaryTreeSet[int](c)
+	var s Set[int] = MakeBinaryTreeSet[int](types.IntComparator)
 	s.Add(1)
 	s.Add(2)
 
@@ -76,7 +77,7 @@ func TestBinaryTreeSet_RemoveNonExistent(t *testing.T) {
 // ordered set operations
 
 func TestBinaryTreeSet_First(t *testing.T) {
-	var s OrderedSet[int] = MakeBinaryTreeSet[int](c)
+	var s OrderedSet[int] = MakeBinaryTreeSet[int](types.IntComparator)
 	s.Add(1)
 	s.Add(2)
 
@@ -84,7 +85,7 @@ func TestBinaryTreeSet_First(t *testing.T) {
 }
 
 func TestBinaryTreeSet_Last(t *testing.T) {
-	var s OrderedSet[int] = MakeBinaryTreeSet[int](c)
+	var s OrderedSet[int] = MakeBinaryTreeSet[int](types.IntComparator)
 	s.Add(1)
 	s.Add(2)
 
@@ -92,7 +93,7 @@ func TestBinaryTreeSet_Last(t *testing.T) {
 }
 
 func TestBinaryTreeSet_RemoveFirst(t *testing.T) {
-	var s OrderedSet[int] = MakeBinaryTreeSet[int](c)
+	var s OrderedSet[int] = MakeBinaryTreeSet[int](types.IntComparator)
 	s.Add(1)
 	s.Add(2)
 
@@ -105,7 +106,7 @@ func TestBinaryTreeSet_RemoveFirst(t *testing.T) {
 }
 
 func TestBinaryTreeSet_RemoveLast(t *testing.T) {
-	var s OrderedSet[int] = MakeBinaryTreeSet[int](c)
+	var s OrderedSet[int] = MakeBinaryTreeSet[int](types.IntComparator)
 	s.Add(1)
 	s.Add(2)
 
